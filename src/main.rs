@@ -1,5 +1,4 @@
-
-use num::{pow, range_step};
+use num::{range_step};
 use rand::random_range;
 
 fn mod_exp(mut base: u128, mut exp: u128, modulus: u128) -> u128 {
@@ -34,7 +33,7 @@ fn miller_rabin_primality_test(n: u128, rounds: u128) -> bool {
         k += 1;
     }
 
-    let m = (n - 1) / pow(2, k);
+    let m = (n - 1) >> k;
 
     for _ in 0..rounds {
         let a = random_range(2..n - 1);
@@ -45,7 +44,7 @@ fn miller_rabin_primality_test(n: u128, rounds: u128) -> bool {
         }
 
         let mut is_witness = true;
-        for _ in 1..=k-1 {
+        for _ in 1..k {
             b = mod_exp(b, 2, n);
             if b == n - 1 {
                 is_witness = false;
@@ -65,6 +64,6 @@ fn main() {
     for i in range_step(start, stop, 2) {
         if miller_rabin_primality_test(i, 5) {
             println!("Prime, {:>6}", i);
-        } 
+        }
     }
 }
